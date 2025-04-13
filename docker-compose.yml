@@ -1,0 +1,11 @@
+version: "3.9"
+
+services:
+  bass-backend:
+    build: .
+    container_name: bass-isolator
+    ports:
+      - "8000:8000"
+    volumes:
+      - .:/app
+    restart: unless-stopped
