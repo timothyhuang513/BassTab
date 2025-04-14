@@ -8,28 +8,23 @@ import sys
 ########################
 # Splitting Audio ######
 ########################
-def split_audio():
-    command = [
-        sys.executable, "-m", "spleeter", "separate",
-        "-p", "spleeter:4stems",
-        "-o", "output",
-        "input.mp3"
-    ]
+def split_audio(input_path="input.mp3", model="htdemucs"):
+    output_dir = "output"
 
-    print("🔄 Running Spleeter...")
-
-    result = subprocess.run(command, capture_output=True, text=True)
+    result = subprocess.run([
+        sys.executable, "-m", "demucs",
+        "--two-stems", "bass",
+        "-n", model,
+        "-o", output_dir,
+        input_path
+    ], capture_output=True, text=True)
 
     if result.returncode != 0:
-        print("❌ Spleeter failed")
-        print(result.stderr)
-    else:
-        print("✅ Spleeter succeeded")
-        expected_path = "output/input/bass.wav"
-        if os.path.exists(expected_path):
-            print("✅ Bass.wav found")
-        else:
-            print("⚠️  Bass.wav missing — check output folder structure")
+        print("❌ Demucs failed:", result.stderr)
+        raise RuntimeError("Demucs failed")
+
+    base = os.path.splitext(os.path.basename(input_path))[0]
+    return f"output/{model}/{base}/bass.wav"
 
 ###########################
 # Turning into tabs #######
@@ -48,7 +43,23 @@ def get_tab_position(midi_note):
             return string, fret
     return None, None
 
-def generate_tab_data(bass_path="output/input/bass.wav"):
+def clean_tabs(tab_data):
+    min_gap=0.1
+    filtered = []
+    last_notes = {} # key = (string, fret), value = last time seen
+
+    for note in tab_data:
+        key = (note["string"], note["fret"])
+        last_time = last_notes.get(key, -float("inf"))
+
+
+        if note["time"] - last_time >= min_gap:
+            filtered.append(note)
+            last_notes[key] = note["time"]
+    
+    return filtered
+
+def generate_tab_data(bass_path="output/htdemucs/input/bass.wav"):
     y, sr = librosa.load(bass_path, sr=16000, mono=True)
 
     time, frequency, confidence, _ = crepe.predict(
@@ -74,4 +85,4 @@ def generate_tab_data(bass_path="output/input/bass.wav"):
         except:
             continue
     
-    return tab_data
+    return clean_tabs(tab_data)

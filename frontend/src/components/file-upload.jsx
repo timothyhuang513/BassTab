@@ -1,6 +1,7 @@
-"use client"
+// "use client"
 
 import { useState, useRef } from "react"
+import ReactLoading from "react-loading";
 import styles from "./file-upload.module.css"
 
 export function FileUpload({ setTabData }) {
@@ -8,6 +9,7 @@ export function FileUpload({ setTabData }) {
   const [file, setFile] = useState(null);
   const [isDragging, setIsDragging] = useState(false)
   const fileInputRef = useRef(null)
+  const [loading, setLoading] = useState(false);
 
   const handleDragOver = (e) => {
     e.preventDefault()
@@ -23,42 +25,43 @@ export function FileUpload({ setTabData }) {
       setFile(e.target.files[0]);
     }
   };
-  
+
   const handleDrop = (e) => {
     e.preventDefault();
     setIsDragging(false);
-  
+
     if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
       setFile(e.dataTransfer.files[0]);
     }
-  };  
+  };
 
   const handleRemoveFile = () => {
     setFile(null);
-  };  
+  };
 
   const handleUpload = async () => {
     if (!file) return;
-  
+
+    setLoading(true);
+
     const formData = new FormData();
     formData.append("file", file);
-  
+
     try {
       const response = await fetch("http://localhost:8000/analyze", {
         method: "POST",
         body: formData,
       });
-  
-      if (!response.ok) throw new Error("Upload failed");
-  
+
       const data = await response.json();
       setTabData(data);
-    } catch (error) {
-      console.error("Upload error:", error);
-      alert("Something went wrong while uploading your file.");
+    } catch (err) {
+      console.error("Upload failed:", err);
+      alert("Something went wrong!");
+    } finally {
+      setLoading(false);
     }
   };
-  
 
   return (
     <div className={styles.container}>
@@ -125,6 +128,7 @@ export function FileUpload({ setTabData }) {
           <button onClick={handleUpload} className={styles.uploadButton}>
             Upload File
           </button>
+          {loading && <p className={styles.loadingText}>Analyzing... 🎧</p>}
         </div>
       )}
     </div>
