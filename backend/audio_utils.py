@@ -10,6 +10,7 @@ import sys
 ########################
 def split_audio(input_path="input.mp3", model="htdemucs"):
     output_dir = "output"
+    os.environ["TORCH_HOME"] = os.path.join(os.getcwd(), ".torch_cache")
 
     result = subprocess.run([
         sys.executable, "-m", "demucs",
@@ -20,7 +21,9 @@ def split_audio(input_path="input.mp3", model="htdemucs"):
     ], capture_output=True, text=True)
 
     if result.returncode != 0:
-        print("❌ Demucs failed:", result.stderr)
+        print("❌ Demucs failed:")
+        print("STDERR:", result.stderr)
+        print("STDOUT:", result.stdout)
         raise RuntimeError("Demucs failed")
 
     base = os.path.splitext(os.path.basename(input_path))[0]
