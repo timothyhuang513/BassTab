@@ -25,7 +25,8 @@ python -m venv venv
 ```
 
 ### 2. Install Dependencies
-``pip install -r requirements.txt``
+``pip install -r requirements.txt``<br/>
+``pip install -r requirements-patch.txt``
 
 ### 3. To Run the App
 ``uvicorn main:app --reload``
