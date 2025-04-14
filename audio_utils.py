@@ -60,5 +60,4 @@ def generate_tab_data(bass_path="output/input/bass.wav"):
         except:
             continue
     
-    # print("tab_data:", tab_data)
     return tab_data
