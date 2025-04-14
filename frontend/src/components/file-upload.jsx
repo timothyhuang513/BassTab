@@ -1,7 +1,4 @@
-// "use client"
-
 import { useState, useRef } from "react"
-import ReactLoading from "react-loading";
 import styles from "./file-upload.module.css"
 
 export function FileUpload({ setTabData }) {
