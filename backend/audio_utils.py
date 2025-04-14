@@ -8,7 +8,7 @@ import sys
 ########################
 # Splitting Audio ######
 ########################
-def split_audio(input_path="input.mp3", model="htdemucs"):
+def split_audio(input_path="input.mp3", model="mdx_q"):
     output_dir = "output"
     os.environ["TORCH_HOME"] = os.path.join(os.getcwd(), ".torch_cache")
 
@@ -62,7 +62,7 @@ def clean_tabs(tab_data):
     
     return filtered
 
-def generate_tab_data(bass_path="output/htdemucs/input/bass.wav"):
+def generate_tab_data(bass_path="output/mdx_q/input/bass.wav"):
     y, sr = librosa.load(bass_path, sr=16000, mono=True)
 
     time, frequency, confidence, _ = crepe.predict(
