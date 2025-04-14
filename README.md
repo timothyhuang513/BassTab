@@ -25,11 +25,23 @@ python -m venv venv
 ```
 
 ### 2. Install Dependencies
-``pip install -r requirements.txt``<br/>
-``pip install -r requirements-patch.txt``
+```bash
+pip install fastapi uvicorn spleeter crepe librosa python-multipart soundfile
+```
+
+```bash
+pip install numpy==1.22.4
+pip install llvmlite==0.38.1
+pip install numba==0.55.2
+```
+-or- (the bottom one is broken for me)
+```bash
+pip install -r requirements.txt
+pip install -r requirements-patch.txt
+```
 
 ### 3. To Run the App
-``uvicorn main:app --reload``
+``python -m uvicorn main:app --reload``
 
 ### 4. To Exit the Virtual Environment Run
 ``deactivate``

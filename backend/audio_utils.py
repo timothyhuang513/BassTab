@@ -9,13 +9,27 @@ import sys
 # Splitting Audio ######
 ########################
 def split_audio():
-    subprocess.run([
+    command = [
         sys.executable, "-m", "spleeter", "separate",
         "-p", "spleeter:4stems",
         "-o", "output",
         "input.mp3"
-    ])
-        
+    ]
+
+    print("🔄 Running Spleeter...")
+
+    result = subprocess.run(command, capture_output=True, text=True)
+
+    if result.returncode != 0:
+        print("❌ Spleeter failed")
+        print(result.stderr)
+    else:
+        print("✅ Spleeter succeeded")
+        expected_path = "output/input/bass.wav"
+        if os.path.exists(expected_path):
+            print("✅ Bass.wav found")
+        else:
+            print("⚠️  Bass.wav missing — check output folder structure")
 
 ###########################
 # Turning into tabs #######
