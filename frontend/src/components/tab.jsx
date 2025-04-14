@@ -1,10 +1,7 @@
 import styles from "./tab.module.css";
 
-// Helper: create empty tab string line
-// const createEmptyLine = () => "----------------";
-
-// Helper: number of characters between notes
 const spacing = 4;
+const maxLineWidth = 60;
 
 export function Tab({ tabJson = [] }) {
   const generateTabs = (tabJson) => {
@@ -15,11 +12,9 @@ export function Tab({ tabJson = [] }) {
       E: [],
     };
 
-    // let position = 0;
-
     for (const note of tabJson) {
       const fret = String(note.fret);
-      const pad = "-".repeat(spacing - fret.length); // adjust spacing based on fret length
+      const pad = "-".repeat(spacing - fret.length);
 
       for (const string of ["G", "D", "A", "E"]) {
         if (string === note.string) {
@@ -28,16 +23,20 @@ export function Tab({ tabJson = [] }) {
           lines[string].push("-".repeat(spacing));
         }
       }
-
-      // position++;
     }
 
-    // Build tab strings
-    const tabLines = Object.entries(lines).map(([string, segments]) => {
-      return `${string}|${segments.join("")}`;
-    });
+    // Chunking tab lines into wrapped segments
+    const wrapped = [];
+    const totalSteps = lines.G.length;
+    for (let i = 0; i < totalSteps; i += maxLineWidth / spacing) {
+      const chunk = Object.entries(lines).map(([string, segments]) => {
+        const segmentSlice = segments.slice(i, i + maxLineWidth / spacing).join("");
+        return `${string}|${segmentSlice}`;
+      });
+      wrapped.push(chunk.join("\n"));
+    }
 
-    return tabLines.join("\n");
+    return wrapped.join("\n\n"); // separate wrapped chunks with spacing
   };
 
   return (
