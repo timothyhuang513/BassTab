@@ -15,7 +15,6 @@ def split_audio(input_path="input.mp3", model="mdx_q"):
         sys.executable, "-m", "demucs",
         "--two-stems", "bass",
         "-n", model,
-        "--segment", "10",
         "-o", output_dir,
         input_path
     ], capture_output=True, text=True)
