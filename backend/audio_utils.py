@@ -10,12 +10,16 @@ import sys
 ########################
 def split_audio(input_path="input.mp3", model="mdx_q"):
     output_dir = "output"
-    os.environ["TORCH_HOME"] = os.path.join(os.getcwd(), ".torch_cache")
+    os.environ["TORCH_HOME"] = os.path.abspath(".torch_cache")
+    
+    print("🔍 Checking installed packages in Render...")
+    subprocess.run([sys.executable, "-m", "pip", "list"])
 
     result = subprocess.run([
         sys.executable, "-m", "demucs",
         "--two-stems", "bass",
         "-n", model,
+        "--segment", "10",
         "-o", output_dir,
         input_path
     ], capture_output=True, text=True)
