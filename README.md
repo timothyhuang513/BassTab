@@ -19,7 +19,7 @@ Before doing any of the steps below, cd into the backend folder
 ### 1. Create a Virtual Environment
 #### macOS/Linux:
 ```
-python3 -m venv venv
+python -m venv venv
 source venv/bin/activate
 ```
 
