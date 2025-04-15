@@ -18,24 +18,24 @@ npm run dev
 Before doing any of the steps below, cd into the backend folder
 ### 1. Create a Virtual Environment
 #### macOS/Linux:
-```bash
+```
 python3 -m venv venv
 source venv/bin/activate
 ```
 
 #### Windows (PowerShell):
-```bash
+```
 python -m venv venv
 .\venv\Scripts\Activate.ps1
 ```
 
 ### 2. Install Dependencies
-```bash
+```
 pip install -r requirements.txt
 ```
 
 ### 3. To Run the App
-```bash
+```
 uvicorn main:app --reload
 ```
 

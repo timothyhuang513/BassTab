@@ -10,10 +10,6 @@ import sys
 ########################
 def split_audio(input_path="input.mp3", model="mdx_q"):
     output_dir = "output"
-    os.environ["TORCH_HOME"] = os.path.abspath(".torch_cache")
-    
-    print("🔍 Checking installed packages in Render...")
-    subprocess.run([sys.executable, "-m", "pip", "list"])
 
     result = subprocess.run([
         sys.executable, "-m", "demucs",

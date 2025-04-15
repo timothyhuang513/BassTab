@@ -45,8 +45,7 @@ export function FileUpload({ setTabData }) {
     formData.append("file", file);
 
     try {
-      // const response = await fetch("http://localhost:8000/analyze", {
-        const response = await fetch("https://basstab.onrender.com/analyze", {
+      const response = await fetch("http://localhost:8000/analyze", {
         method: "POST",
         body: formData,
       });
